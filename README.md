@@ -14,7 +14,7 @@ Use cases: <br>
 🏛️ Visitors exploring campus <br>
 ⚡ Staff finding the fastest path between buildings <br>
 
-<!--**What’s inside?**
+**What’s inside?**
 
 This organization has multiple repositories, each focusing on a different piece of the puzzle:
 
@@ -54,7 +54,7 @@ Member C – UI/UX ninja
 
 Member D – Integration guru
 
-Member E – Documentation master (and README writer ✍️)-->
+Member E – Documentation master (and README writer ✍️)
 
 **Cool features**
 
