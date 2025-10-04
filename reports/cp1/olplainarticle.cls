@@ -4,6 +4,7 @@
 %
 % Based on the SelfArx document class.
 %
+% Modified by Fred Yang
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{olplainarticle}[06/12/2015, v1.0]
 \RequirePackage[utf8]{inputenc}
@@ -52,7 +53,7 @@
 % Footers
 \lfoot{}%
 \cfoot{}%
-\rfoot{\small\sffamily\bfseries\thepage/\pageref{LastPage}}%
+\rfoot{\small\sffamily\bfseries\thepage/\pageref*{LastPage}}%
 \renewcommand{\headrulewidth}{0pt}% % No header rule
 \renewcommand{\footrulewidth}{0pt}% % No footer rule
 
@@ -145,7 +146,7 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 \thispagestyle{empty}%
 \vskip-36pt%
 {\raggedright\sffamily\bfseries\fontsize{20}{25}\selectfont \@title\par}%
-\vskip10pt
+\vskip5pt
 {\raggedright\sffamily\fontsize{12}{16}\selectfont  \@author\par}
 \vskip18pt%
 {%
@@ -167,7 +168,7 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 {\color{color1}}%
 }%
 }%
-\vskip25pt%
+\vskip15pt%
 }%
 }%
 %-----------------------------------------------
@@ -188,3 +189,4 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 
 %-----------------------------------------------
 \renewcommand{\@biblabel}[1]{[#1]}
+\bibliographystyle{unsrt}

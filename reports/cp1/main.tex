@@ -2,10 +2,13 @@
 % Use option lineno for line numbers 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt}
+\usepackage{xcolor}
+\colorlet{color2}{white}  % olplainarticle 使用 color2 作为 abstract 文字颜色
 \bibliographystyle{apalike}
 \bibliographystyle{unsrtnat}   % <- orders entries by citation order
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage{subcaption}
+
 
 \title{CSE 6010 CheckPoint 1: \\Campus Navigation System}
 
@@ -20,11 +23,8 @@
 \affil[4]{mfan77@gatech.edu}
 \affil[5]{cchiu73@gatech.edu}
 
-
-
-
 \begin{abstract}
-Abstract
+This project presents the development of a vehicle navigation prototype for the Georgia Tech campus, leveraging OpenStreetMap (OSM) as the data source. The campus road network is constructed as a weighted and directed graph, where edge weights represent travel costs such as distance and estimated time. To compute the shortest paths, we use A* Search algorithm as our core algorithm. The prototype is designed to generate two main outputs for users: (1) Estimated travel time, calculated based on segment distances and an assumed vehicle speed, and (2) Turn-by-turn route instructions, which include straight segments, left/right turns, and cumulative distance for each instruction. By combining more useful extensions, we hope to create a fully functional navigation system. 
 \end{abstract}
 
 \usepackage[numbers,sort&compress]{natbib}
@@ -36,8 +36,9 @@ Abstract
 \maketitle
 \thispagestyle{empty}
 
+
 \section*{Introduction}
-Navigation systems are essential for guiding users efficiently to their destinations, improving travel time, safety, and overall convenience. In addition, navigation systems offer users reassurance when traveling in unfamiliar areas, reducing anxiety and enhancing confidence in reaching their destinations. This project is inspired by such systems and aims to develop a vehicle navigation prototype specifically for the Georgia Tech campus. By modeling the campus road network as a graph, the system can compute optimal routes and provide results including estimated travel time, shortest path distance, and turn-by-turn instructions. This prototype not only facilitates navigation within a constrained environment but also serves as a foundation for potential extensions, such as real-time traffic updates, dynamic rerouting, and deployment in larger urban areas.
+Navigation systems are essential for guiding users efficiently to their destinations, improving travel time, safety, and overall convenience. In addition, navigation systems offer users reassurance when traveling in unfamiliar areas, reducing anxiety and enhancing confidence in reaching their destinations. This project is inspired by such systems and aims to develop a vehicle navigation prototype specifically for Georgia Tech campus. By modeling the campus road network as a graph, the system can compute optimal (shortest) routes and provide results including estimated travel time and turn-by-turn instructions. This prototype not only facilitates navigation within a constrained environment but also serves as a foundation for all potential extensions. 
 
 \section*{Literature Review}
 Navigation systems play a vital role in improving mobility by enabling users to efficiently reach destinations while reducing travel time and uncertainty. For constrained environments such as university campuses, OpenStreetMap (OSM) has proven to be a reliable open-source dataset for routing applications, as it provides accessible road and building data that can be transformed into graph structures suitable for shortest-path algorithms \cite{10.1007/978-3-642-10601-9_13, s18020509}. Several campus navigation prototypes have successfully applied OSM, highlighting its adaptability for small-scale routing tasks.
@@ -49,7 +50,7 @@ Equally important is the generation of user-friendly navigation instructions. Re
 In summary, existing literature confirms the feasibility of developing a campus-scale navigation system using OSM data, graph modeling, and classical shortest-path algorithms. Simplified assumptions, such as constant travel speed and geometric building linkage, align with prior work, while future opportunities include integrating landmarks or augmented reality features to improve usability.
 
 \section*{Objectives}
-The objective of this project is to design and implement a navigation system of the Georgia Tech campus. The system aims to assist users in finding the shortest route between a starting point and destination. By using a graph-based representation of the campus road network, the system provides not only the shortest path but also detailed route information to facilitate navigation. The core goal is to demonstrate a functional vehicle routing prototype that can serve as a foundation for future development of full-scale navigation systems.
+The objective of this project is to create a Georgia Tech campus navigation system, which aims to assist users in finding the shortest route between a starting point and destination. By using a graph-based representation of part of the campus road network, the system provides the shortest path and corresponding instructions. The goal is to demonstrate a vehicle routing prototype that can serve as a foundation for future extension of a full-scale navigation system.
 
 \subsection*{Input}
 \begin{itemize}
@@ -75,7 +76,7 @@ The objective of this project is to design and implement a navigation system of 
 \section*{System Descriptions}
 \subsection*{System Scope}
 \begin{itemize}
-    \item Area: Georgia Tech campus
+    \item Area: Georgia Tech Atlanta campus
     \item Road network modeled as a graph with nodes representing intersections or key points and edges representing road segments
 \end{itemize}
 
@@ -89,8 +90,8 @@ The objective of this project is to design and implement a navigation system of 
 \end{itemize}
 
 \section*{Data Descriptions}
-\subsection{Data Scource}
-In this study, we aim to construct an adjacency matrix that represents the connections between campus buildings and the road network. The data source is \textbf{OpenStreetMap (OSM)}, an open geospatial platform collaboratively maintained and updated by contributors worldwide. OSM stores data in a structured format consisting of \textbf{nodes}, \textbf{ways}, and \textbf{relations}:
+\subsection*{Data Source}
+We aim to construct an adjacency list that captures the connectivity between campus buildings and the surrounding road network, serving as the dataset for our research. The data are obtained from \textbf{OpenStreetMap (OSM)}, an open geospatial platform collaboratively maintained and continuously updated by contributors worldwide. OSM organizes geographic information in a structured format consisting of \textbf{nodes}, \textbf{ways}, and \textbf{relations}:
 \begin{itemize}
     \item \textbf{Buildings} are represented as closed polygons, defined by a series of latitude–longitude coordinates (nodes). Each building polygon is associated with descriptive tags, such as \texttt{building=yes} and \texttt{name=Tech Tower}.
 
@@ -98,9 +99,9 @@ In this study, we aim to construct an adjacency matrix that represents the conne
 \end{itemize}
 
 
-For this phase, we extracted \textbf{motor-vehicle-accessible roads} (\texttt{network\_type=drive}) within the Georgia Tech campus and selected \textbf{teaching buildings where CSE courses are held this semester}.
+For this phase, we extracted \textbf{motor-vehicle-accessible roads} (\texttt{network\_type=drive}) within the Georgia Tech campus.
 
-\subsection*{Modeling Assumptions}
+\subsection*{Data Preparation Assumptions}
 To connect buildings with the road network, we make the following assumptions:
 \begin{enumerate}
     \item \textbf{Parking locations must lie on motor-vehicle roads,} i.e., cars must park alongside the road rather than on arbitrary open areas.
@@ -109,53 +110,47 @@ To connect buildings with the road network, we make the following assumptions:
 \end{enumerate}
 \subsection*{Processing Steps}
 \begin{enumerate}
-    \item \textbf{Road Network Construction}
-    \begin{itemize}
-        \item Download campus road data from OSM, retaining only motor-vehicle-accessible roads.
-        \item For roads stored as curved geometries (\texttt{LineString} with multiple intermediate points), split them into straight-line segments to enable accurate point-to-segment projection.
-    \end{itemize}
-
-    \item \textbf{Building Data Extraction}
-    \begin{itemize}
-        \item Download campus building data from OSM, filtering for target teaching buildings (i.e., those hosting CSE courses).
-        \item Remove records without names or with duplicates to ensure data consistency.
-    \end{itemize}
-
-    \item Centroid Calculation
-    \begin{itemize}
-        \item For each building polygon, compute its geometric centroid, which serves as the representative location of the building.
-    \end{itemize}
+    \item \textbf{Road and Building Data Processing}
+\begin{itemize}
+    \item Download road and building data from OSM, keeping only motor-vehicle-accessible roads and the target buildings.
+    \item Simplify road geometries and compute the geometric centroid of each selected building.
+\end{itemize}
     
-    \item Projection onto Roads
+    \item \textbf{Projection onto Roads}
     \begin{itemize}
         \item For each building centroid, compute the shortest distance to every road segment using point-to-segment projection.
         \item Identify the nearest road segment and project the centroid orthogonally onto it, yielding a projection point.
     \end{itemize}
     
-    \item Graph Update
+    \item \textbf{Graph Update}
     \begin{itemize}
         \item Insert the projection point as a new node in the road graph.
         \item Split the corresponding road edge into two segments: from the original road start node to the projection point, and from the projection point to the road end node. Update the edge lengths using great-circle (haversine) distances.
-        \item Record the mapping between each building and its associated projection node, along with the projection distance.
+        \item Record the mapping between each building and its associated projection node.
     \end{itemize}
     
-    \item Adjacency Matrix Construction (\textbf{NEED TO BE UPDATED})
+    \item \textbf{Adjacency List Construction}
     \begin{itemize}
-        \item 
+        \item For each node $i$, explicitly store its \textbf{neighbors}, i.e., the set of adjacent nodes directly connected to $i$.
+        \item Each neighbor entry is stored together with the corresponding edge distance $d_{ij}$.
+        \item Formally, the adjacency list is defined as 
+        \[
+            \text{Adj}[i] = \{ (j, d_{ij}) \;\mid\; j \in \text{Neighbors}(i) \}.
+        \]
     \end{itemize}
 \end{enumerate}
+
 
 \subsection*{Example}
 To illustrate the dataset construction process, we present a visualization of the resulting campus model. In this example, we included \textbf{all motor-vehicle roads} from the OSM database, while the set of buildings was restricted to three representative teaching facilities: Armstrong Residence Hall, Baker Building, and John Lewis Student Center.
 \begin{itemize}
     \item \textbf{Road nodes} are shown as white points. Adjacent nodes are connected by straight line segments, forming the underlying road network.
-    \item \textbf{Buildings} are highlighted as red polygons, corresponding to the selected footprints extracted from OSM.
-    \item \textbf{Building centroids} are represented by blue points, marking the geometric center of each building polygon.
+    \item \textbf{Buildings} are highlighted as red polygons.
+    \item \textbf{Building centroids} are represented by blue points.
     \item \textbf{Projection points} are shown as green crosses, indicating the nearest locations on the road network to each centroid.
-    \item Each centroid is connected to its projection point with a dashed black line, demonstrating the geometric link between buildings and roads.
 \end{itemize}
 
-This visualization shows how the campus environment is represented in our model: the complete road network is preserved, while only a chosen subset of buildings is considered. Each building is systematically anchored to the road network through projection, providing a consistent basis for constructing the adjacency matrix and performing subsequent analyses. For comparison, we also include a ground-truth campus map from OSM, in which the corresponding buildings are highlighted in red.
+This visualization shows how the campus environment is represented in our model: the complete road network is preserved, while only a chosen subset of buildings is considered. Each building is systematically anchored to the road network through projection, providing a consistent basis for constructing the adjacency list and performing subsequent analyses. For comparison, we also include a ground-truth campus map from OSM, in which the corresponding buildings are highlighted in red.
 
 \begin{figure}[h!]
     \centering
@@ -225,13 +220,27 @@ where $\mathbf{e}_1, \mathbf{e}_2$ are consecutive edge vectors, $\theta = \arcc
 
 These thresholds reflect human perception, reducing false turn instructions from slight bends while still capturing sharp changes in direction.
 
+\section*{Platform(s) / modalities of development}
+
+The navigation system will be primarily implemented in \textbf{C} (conforming to the C17 standard), with compilation and testing by \textbf{Clang (macOS)} for development and testing. \textbf{Python 3.10+} is also used for preprocessing and visualizing (if needed) OSM data. Development is managed collaboratively through \textbf{GitHub} and \textbf{Overleaf}, ensuring consistent version control of both source code and \LaTeX{} documentation throughout project.
+
+% Last Page
+\newpage
 \section*{Acknowledgment}
+We appreciate each teammate hard work and positive cooperation for the checkpoint1:
+\begin{itemize}
+    \item Jing He and Haowen Jiang: handled the campus data processing, graph modeling, and wrote Data Description
+    \item Ming Fan and Chia-Hsin Chiu: set up Github, co-authered the abstract, introduction, literature review, objectives and system descriptions part.
+    \item Fred Yang: proposed and wrote the algorithmic part, converted the draft report from Google Docx to \LaTeX{}, and helped set up the GitHub/Overleaf repository for future team collaboration.
+\end{itemize}
 We thank the Georgia Tech CSE 6010 teaching staff for their guidance during the early stages of this project.  
 The current implementation and progress can be found at:  
 \url{https://github.com/fredkyang/gt_cse6010_navigation_system}
 
-This repository is intended solely for use in CSE 6010 coursework.
-\bibliographystyle{unsrtnat}   % citation order
-\bibliography{references}      % matches references.bib filename
+This repository is intended solely for use in CSE 6010 (Fall 25) coursework.
+
+About AI: literature review is summarized by AI.
+\bibliographystyle{unsrt}
+\bibliography{references}
 
 \end{document}
