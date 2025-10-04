@@ -14,25 +14,14 @@ Use cases: <br>
 🏛️ Visitors exploring campus <br>
 ⚡ Staff finding the fastest path between buildings <br>
 
-**What’s inside?**
+**Cool features**
 
-This organization has multiple repositories, each focusing on a different piece of the puzzle:
+🐾 Step-by-step directions with estimated travel time <br>
+🛴 Easy-to-follow turn-by-turn instructions <br>
+🚌 Future expansion: choose your transportation mode (walk, bike, shuttle!) <br>
 
-graph-construction → where we turn the campus map into a graph
+**Data and graph construction**
 
-pathfinding-algorithms → all the shortest path magic happens here
-
-frontend-ui → pretty maps and user-friendly directions
-
-integration → putting everything together into a working system
-
-**Our team**
-
-We’re a group of students collaborating to bring this idea to life:
-
-Member A – Algorithm wizard
-
-Member B – Data wrangler
 We construct a road–building adjacency graph for the Georgia Tech campus 
 using OpenStreetMap (OSM) data.
 
@@ -50,16 +39,3 @@ using OpenStreetMap (OSM) data.
 This pipeline transforms raw OSM data into a unified road–building graph model,
 which can be used for shortest-path search, parking analysis, and other 
 network-based computations.
-
-
-Member C – UI/UX ninja
-
-Member D – Integration guru
-
-Member E – Documentation master (and README writer ✍️)
-
-**Cool features**
-
-🐾 Step-by-step directions with estimated travel time <br>
-🛴 Easy-to-follow turn-by-turn instructions <br>
-🚌 Future expansion: choose your transportation mode (walk, bike, shuttle!) <br>
