@@ -10,15 +10,15 @@ This is the home of our Campus Navigation System project — a fun (and hopefull
 We aim to build a navigation system that makes campus routes easy to understand and provide clear and friendly route guidance. 
 
 Use cases: <br>
-⏰ Students rushing to class <br>
-🏛️ Visitors exploring campus <br>
-⚡ Staff finding the fastest path between buildings <br>
+- Students rushing to class <br>
+- Visitors exploring campus <br>
+- Staff finding the fastest path between buildings <br>
 
 **Cool features**
 
-🐾 Step-by-step directions with estimated travel time <br>
-🛴 Easy-to-follow turn-by-turn instructions <br>
-🚌 Future expansion: choose your transportation mode (walk, bike, shuttle!) <br>
+- Step-by-step directions with estimated travel time <br>
+- Easy-to-follow turn-by-turn instructions <br>
+- Future expansion: choose your transportation mode (walk, bike, shuttle!) <br>
 
 **Data and graph construction**
 
