@@ -1,0 +1,53 @@
+\documentclass[fleqn,10pt]{olplainarticle}
+% Use option lineno for line numbers 
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\usepackage{xcolor}
+\colorlet{color2}{white}  % olplainarticle 使用 color2 作为 abstract 文字颜色
+\bibliographystyle{apalike}
+\bibliographystyle{unsrtnat}   % <- orders entries by citation order
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{subcaption}
+
+
+\title{CSE 6010 CheckPoint 2: \\Campus Navigation System}
+
+\author[1]{Jing He}
+\author[2]{Fred Yang}
+\author[3]{Haowen Jiang}
+\author[4]{Ming-Cheng Fan}
+\author[5]{Chia-Hsin Chiu}
+\affil[1]{jhe468@gatech.edu}
+\affil[2]{fred.yang@gatech.edu}
+\affil[3]{hjiang401@gatech.edu}
+\affil[4]{mfan77@gatech.edu}
+\affil[5]{cchiu73@gatech.edu}
+
+
+\usepackage[numbers,sort&compress]{natbib}
+\makeatletter
+\makeatother
+\begin{document}
+
+\flushbottom
+\maketitle
+
+
+\section*{Introduction}
+
+
+% Last Page
+\newpage
+\section*{Acknowledgment}
+
+We thank the Georgia Tech CSE 6010 teaching staff for their guidance during the early stages of this project.  
+The current implementation and progress can be found at:  
+\url{https://github.com/fredkyang/gt_cse6010_navigation_system}
+
+This repository is intended solely for use in CSE 6010 (Fall 25) coursework.
+
+About AI: literature review is summarized by AI.
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}
