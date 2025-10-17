@@ -20,3 +20,9 @@
 *.nav
 *.snm
 
+# Editor settings
+.vscode
+
+# build artifacts
+/obj/
+/bin/
