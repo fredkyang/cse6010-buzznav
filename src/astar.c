@@ -120,9 +120,68 @@ This lets us incorporate a proper heuristic and run true A* rather than pure Dij
 
 while (1)
 {
+//sstep 1 find min f_score
+int current =find_min_node(nodes,num_nodes);
+// unvisited node = no way
+if (current== -1)
+{
+    //free memory is required, please not forget
+    free(nodes);
+    return-1;
     /* code */
 }
 
+//sstep 2 reach goal or not
+if (current==goal)
+{
+    double distance = nodes[goal].g_score;
+    free(nodes);
+    return distance;
+    /* code */
+}
+
+//sstep3 mark the node visited
+nodes[current].visited= true;
+
+
+//sstep4 deal neighbors
+// find the current node's first neighbor
+Edge* edge= graph->nodes[current].neighbors;
+    /* code */
+while (edge!=NULL)
+{
+    int neighbor= edge->to; 
+    // neighbor node ID get
+
+    //skip visited
+    if (nodes[neighbor].visited)
+    {
+        edge=edge->next;
+        continue;
+        /* code */
+    }
+    
+    double new_distance=nodes[current].g_score+edge->weight;
+
+    //shorter= change; or do nothing
+    if (new_distance<nodes[neighbor].g_score)
+    {
+        nodes[neighbor].parent=current;
+        nodes[neighbor].f_score=new_distance;
+        nodes[neighbor].g_score=new_distance;
+        /* code */
+    }
+   // go to next edge in the adjacency list
+edge=edge->next;
+    /* code */
+}
+
+
+}
+// if work right , should get this place
+//clean
+free(nodes);
+return-1;
 
 
 }
