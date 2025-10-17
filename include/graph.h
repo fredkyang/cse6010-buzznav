@@ -1,49 +1,53 @@
-<<<<<<< Updated upstream
-
-// ==================
-// Struct Definitions
-// ==================
-typedef struct {
-    int id;
-    double lat;
-    double lon;
-} Node;
-
-typedef struct {
-    int from;
-    int to;
-    double weight;
-} Edge;
-
-// ==================
-// Function Declarations
-// ==================
-=======
 #ifndef GRAPH_H
 #define GRAPH_H
+
+#define MAX_BUILDINGS 400 // Building capacity
+
 // ========================
 // Graph Struct Definitions
+// Adjacency List Representation
 // ========================
+
 typedef struct Edge {
-    int to; // goal node
+    int to; // destination node
     double weight; // road length
     struct Edge* next;
 } Edge;
 
-typedef struct Node {
+typedef struct Node { // Adjacency list node
     int id;
-    Edge* neighbors;
+    Edge* neighbors; // point to the first edge of the linked list
 } Node;
 
 typedef struct Graph {
     int num_nodes;
-    Node* nodes;
+    Node* nodes; // array of nodes
 } Graph;
 
 // ======================
 // Graph Function Declarations
 // ======================
 Graph* create_graph(int num_nodes);
-void add_edge(Graph* graph, int from, int )
+void add_edge(Graph* g, int from, int to, double weight);
+Graph* load_graph(const char* filename);
+void print_graph(const Graph* g);
+void free_graph(Graph* g);
+
+// ========================
+// Building Struct Definitions
+// ========================
+typedef struct BuildingEntry{
+    char* name;
+    int node_id;
+} BuildingEntry;
+
+typedef struct BuildingMapping{
+    BuildingEntry* entries;
+    int count;
+    int capacity;
+} BuildingMapping;
+
+BuildingMapping* load_building(const char* filename);
+int get_building_id(const BuildingMapping* mapping, const char* name);
+void free_building(BuildingMapping* mapping);
 #endif
->>>>>>> Stashed changes
