@@ -11,9 +11,10 @@ int main(int argc, char *argv[]){
     const char* start_building = argv[1];
     const char* goal_building = argv[2];
 
-    // Step 1: Load graph from file
+    // Step 1: Load graph and buildingmapping from file
     Graph* campus = load_graph("./data/adj_list.csv"); // Build adjacency list of the campus
     if (!campus) {
+        free_graph(campus);
         return 1;
     }
 
@@ -22,15 +23,18 @@ int main(int argc, char *argv[]){
 
     BuildingMapping* mapping = load_building("./data/building_mapping.csv"); // Load building mapping
     if (!mapping) {
+        free_graph(campus);
+        free_building(mapping);
         return 1;
     }
 
     // Step 2: Search building node IDs
     int start_id = get_building_id(mapping, start_building);
     int goal_id = get_building_id(mapping, goal_building);
-    free_building(mapping); // free the building mapping
 
     if (start_id == -1 || goal_id == -1) {
+        free_graph(campus);
+        free_building(mapping);
         return 1;
     }
 
@@ -45,6 +49,7 @@ int main(int argc, char *argv[]){
     // Step 6: Print results
 
     // Step 7: Clean up
+    free_building(mapping);
     free_graph(campus);
     return 0;
 }
