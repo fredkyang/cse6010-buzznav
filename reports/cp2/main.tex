@@ -33,9 +33,76 @@
 \maketitle
 
 
-\section*{Introduction}
+\section*{Current State}
+At present, we have completed the data generation function and produced the required data. Through this function, we constructed the adjacency list of the campus. Since the adjacency list stores the IDs of each node (representing buildings or roads), we also generated a mapping table between building names and their corresponding node IDs.
+
+\section*{Initial Results}
+The file \texttt{building\_mapping.csv} serves as a mapping table between building names and their corresponding node IDs in the campus road network. In total, the file consists of \textbf{384 rows}, meaning that 384 buildings are mapped to their respective graph nodes.It contains two columns:
+
+\begin{itemize}
+    \item \textbf{building\_name}: the name of each building (e.g., \textit{Baker Building}, \textit{John Lewis Student Center});
+    \item \textbf{node\_id}: the unique identifier of the corresponding node in the road network graph.
+\end{itemize}
+
+The file \texttt{adj\_list.csv} stores the adjacency list representation of the campus road network.In total, the file contains \textbf{1,933 rows}, each corresponding to an edge in the network. It contains three columns:
+
+\begin{itemize}
+    \item \textbf{src}: the source node ID, representing the starting point of an edge in the graph;
+    \item \textbf{dst}: the destination node ID, representing the endpoint of the same edge;
+    \item \textbf{length}: the physical distance (in meters) between the source and destination nodes.
+\end{itemize}
+
+\begin{table}[h]
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\textbf{(a) building\_map.csv}\\[4pt]
+\begin{tabular}{l c}
+\hline
+\textbf{building\_name} & \textbf{node\_id} \\
+\hline
+Ferst Drive \& State Street & 727 \\
+Klaus Building & 728 \\
+Fitten Hall & 729 \\
+Techwood Drive \& North Avenue & 730 \\
+\hline
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\textbf{(b) adj\_list.csv}\\[4pt]
+\begin{tabular}{c c c}
+\hline
+\textbf{src} & \textbf{dst} & \textbf{length (m)} \\
+\hline
+172 & 173 & 16.5337660224793 \\
+172 & 983 & 1.8516020234408266 \\
+173 & 984 & 12.801718407406037 \\
+173 & 1047 & 7.146090258556631 \\
+\hline
+\end{tabular}
+\end{minipage}
+\caption[b]{Examples of \texttt{building\_map.csv} and \texttt{adj\_list.csv}}
+\end{table}
 
 
+\section*{Division of labor}
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l l l c}
+    \toprule
+    \textbf{Task} & \textbf{People} & \textbf{Start Date} & \textbf{Duration} \\
+    \midrule
+    Task & All & Sep 10 & 1 week \\
+    Report Writing & All & Nov 26 & 2 weeks \\
+    \bottomrule
+  \end{tabular}
+  \caption{High-level schedule for Scholar Compass}
+  \label{tab:schedule}
+  \vspace{0ex}
+  \noindent\textit{All team members have contributed a similar amount of effort to this proposal and will maintain an equitable distribution of work.}
+\end{table}
 % Last Page
 \newpage
 \section*{Acknowledgment}
