@@ -178,7 +178,7 @@ edge=edge->next;
 
 
 }
-// if work right , should get this place
+// if work right , should not get this place
 //clean
 free(nodes);
 return-1;
