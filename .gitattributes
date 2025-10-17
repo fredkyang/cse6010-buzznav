@@ -1,0 +1,9 @@
+# Automatically normalize line endings to LF for all text files
+* text=auto eol=lf
+
+# Mark these as binary so Git doesn't try to modify line endings
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.zip binary
