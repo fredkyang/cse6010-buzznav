@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
+#include "astar.h"
 
 int main(int argc, char *argv[]){
     if (argc != 3) {
@@ -38,9 +39,24 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
-    
 
     // Step 3: Run algorithm
+    int* path = NULL;
+    int path_len = 0;
+    double total_dist = astar(campus, start_id, goal_id, &path, &path_len);
+
+    if (path) {
+        printf("\nShortest Path (%.2f m): ", total_dist);
+        for (int i = 0; i < path_len; i++) {
+            printf("%d", path[i]);
+            if (i < path_len - 1) printf(" -> ");
+        }
+        printf("\n");
+        free(path);
+    } else {
+        printf("No path found.\n");
+    }
+
 
     // Step 4: Compute route metrics
 

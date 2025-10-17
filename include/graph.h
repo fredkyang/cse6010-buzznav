@@ -16,6 +16,7 @@ typedef struct Edge {
 
 typedef struct Node { // Adjacency list node
     int id;
+    double lat, lon;
     Edge* neighbors; // point to the first edge of the linked list
 } Node;
 
