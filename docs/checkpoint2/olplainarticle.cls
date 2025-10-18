@@ -29,10 +29,10 @@
 \RequirePackage{graphicx,xcolor}
 \RequirePackage{booktabs}
 
-\RequirePackage[left=5cm,%
+\RequirePackage[left=2cm,%
                 right=2cm,%
-                top=2.25cm,%
-                bottom=2.25cm,%
+                top=2cm,%
+                bottom=2cm,%
                 headheight=12pt,%
                 letterpaper]{geometry}%
                 
