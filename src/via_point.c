@@ -61,7 +61,7 @@ int*via_ids,int num_via,int**out_path, int* out_len)
     if (i==0)
     {// start to first via
         from_id=start_id;
-        to_id=via_ids;
+        to_id=via_ids[0];
 
         /* code */
     }
@@ -96,7 +96,99 @@ int*via_ids,int num_via,int**out_path, int* out_len)
             /* code */
         }
         // yellow parallel finished
-// need to continue
+
    }
    
+   printf(color_parallel"parallel finished! please check \n" color_reset);
+
+   int all_success=1;
+   double total_distance=0;
+   // check each segment
+   for (int i = 0; i < num_segments; i++)
+   {
+    if (segment_dists[i]==DBL_MAX||segment_paths[i]==NULL)
+    {
+        printf(color_error"segement %d failed" color_reset, i);
+        all_success=0;
+        break;
+        /* code */
+    }
+    total_distance=total_distance+segment_dists[i];
+    /* code */
+   }
+   // if failed, clean and report error
+   if (! all_success)
+   {
+    printf(color_error"clean \n" color_reset);
+    for (int i = 0; i < num_segments; i++)
+    {if (segment_paths[i])
+    {free(segment_paths[i]);
+        /* code */
+    }
+    
+        /* code */
+    }
+    // free container arrays
+    free(segment_dists);
+    free(segment_lens);
+    free(segment_paths);
+
+    *out_len=0;
+    *out_path=NULL;
+    return DBL_MAX;
+    /* code */
+   }
+   // merge segments
+   // a b +b d = a b d
+   printf(color_success" merge segment\n" color_reset);
+
+   int total_len=0;
+   for (int i = 0; i < num_segments; i++)
+   {
+    total_len+=segment_lens[i];
+    if(i>0)
+    {total_len--;}
+    /* code */
+   }
+   // allocate merged path
+   int*merged_path= malloc(sizeof(int)*total_len);
+   int merge_index=0;
+   for (int i = 0; i < num_segments; i++)
+   {int start_copu;
+    // start copy for first or skip this one
+    //  just like a b +b d = a b d, the second b is skipped
+      if (i==0)
+
+      {start_copu=0;
+        /* code */
+      }else{start_copu=1;}
+      for (int k = start_copu; k <segment_lens[i]; k++)
+      {merged_path[merge_index]=segment_paths[i][k];
+        merge_index++;
+        /* code */
+      }
+      
+    /* code */
+   }
+   
+// clean memory
+for (int i = 0; i < num_segments; i++)
+    
+    {free(segment_paths[i]);
+        /* code */
+    
+    
+        /* code */
+    }
+    // free container arrays
+    free(segment_dists);
+    free(segment_lens);
+    free(segment_paths);
+*out_len=total_len;
+*out_path=merged_path;
+// print what you want
+printf(color_success"total distance:%.2f \n" color_reset, total_distance);
+printf(color_success"total nodes %d \n" color_reset, total_len);
+return total_distance;
+
 }
