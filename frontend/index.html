@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GaTech Navigation System</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="sidebar">
+            <h2>Georgia Tech Main Campus</h2>
+
+            <div class="input-group autocomplete-container">
+                <label for="start-building">Start:</label>
+                <input type="text" id="start-building" placeholder="e.g., Student Center" autocomplete="off">
+                <div class="autocomplete-items" id="start-autocomplete-list"></div>
+            </div>
+
+            <div class="input-group autocomplete-container">
+                <label for="end-building">Destination:</label>
+                <input type="text" id="end-building" placeholder="e.g., College of Computing" autocomplete="off">
+                <div class="autocomplete-items" id="end-autocomplete-list"></div>
+            </div>
+
+            <button id="navigate-btn">Start !!!</button>
+
+            <div id="results-panel" style="display: none;">
+                <h3>Route Results</h3>
+                <p id="route-summary"></p>
+                <h4>Step-by-Step Directions:</h4>
+                <div id="turn-by-turn-list"></div>
+            </div>
+        </div>
+
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
