@@ -1,6 +1,7 @@
 # Compiler and flags
-CC = gcc
-CFLAGS = -I include -Wall -Wextra -O2
+CC = gcc-15
+CFLAGS = -I include -Wall -Wextra -O2 -fopenmp
+LDFLAGS = -fopenmp -lm
 
 # Directories
 SRC_DIR = src
@@ -20,7 +21,7 @@ all: $(TARGET)
 # Link all object files into the final executable
 $(TARGET): $(OBJS)
 	@mkdir -p $(BIN_DIR)
-	$(CC) $(OBJS) -lm -o $(TARGET)
+	$(CC) $(OBJS) $(LDFLAGS) -o $(TARGET)
 
 # Compile each .c into .o file
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
