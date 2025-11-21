@@ -17,7 +17,7 @@ Campus routing prototype for CSE6010. We build a directed, weighted graph from O
 
 ## Build
 - Requires a C compiler with OpenMP (e.g., clang with `-fopenmp` or gcc) and POSIX libs.
-- Typical build via `make` (see `Makefile`). Example: `make all` then `./bin/main` (adjust binary name if your Makefile differs).
+- Typical build via `make` (see `Makefile`). Example: `make all` then `./bin/buzznav`.
 
 ## Running
 Quick start:
