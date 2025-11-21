@@ -20,16 +20,23 @@ Campus routing prototype for CSE6010. We build a directed, weighted graph from O
 - Typical build via `make` (see `Makefile`). Example: `make all` then `./bin/main` (adjust binary name if your Makefile differs).
 
 ## Running
-CLI syntax uses start, optional vias, then goal:
+Quick start:
 
 ```sh
-./bin/main "<start>" [via1 via2 ...] "<goal>"
-# example
+make            # build
+./bin/main -h   # see CLI usage
+./bin/main "<start>" [via1 via2 ...] "<goal>"   # run
+```
+
+Examples:
+```sh
+./bin/main "Student Center" "College of Computing Building"
 ./bin/main "Student Center" "Tech Tower" "College of Computing Building"
 ```
 
-- `-h` or `--help` prints usage and exits.
+- Arguments are ordered start, optional vias, then goal.
 - Building names must match `data/building_mapping.csv` exactly.
+- `-h` or `--help` prints usage and exits.
 
 ## Via points
 When vias are provided, the route is solved segment-by-segment in parallel: start → via1 → via2 → … → goal. If any segment is unreachable or a building name is missing, the program exits with an error.
@@ -48,7 +55,3 @@ This reads `data/node_coordinates.csv` and overlays the path on the campus nodes
 - `adj_list.csv`: directed edges with distances (meters) as weights.
 - `building_mapping.csv`: building name → node id lookup.
 - `node_coordinates.csv`: node id → (lon, lat) for haversine heuristic and plotting.
-
-## Contributing
-- Branch from `main` (e.g., `feature/via-point-cli`).
-- Keep changes small, add context in PRs, and run the app at least once for regressions.
