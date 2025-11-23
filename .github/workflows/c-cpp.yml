@@ -1,0 +1,29 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc-13 make
+        sudo ln -s /usr/bin/gcc-13 /usr/bin/gcc-15
+    - name: build a project
+      run: make
+    - name: Run tests
+      run: echo "Build successful, tests will be added later"
+    - name: Upload executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: buzznav-executable
+        path: bin/buzznav

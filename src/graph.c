@@ -64,7 +64,7 @@ Graph *load_graph(const char *filename)
     }
 
     fclose(input);
-    fprintf(stdout, "\033[32m:) Load campus graph suscessfully\n");
+    fprintf(stdout, "\033[32m:) Load campus graph successfully\n");
     return g;
 }
 

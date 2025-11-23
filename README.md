@@ -1,41 +1,57 @@
-# GeorgiaTech-Campus-Navigation-Systems
+# Georgia Tech Campus Navigation System
 
-**🗺️ Georgia Tech Campus Navigation System 🗺️**
+Campus routing prototype for CSE6010. We build a directed, weighted graph from OpenStreetMap data, run A* (with optional via points), and emit the path for quick visualization.
 
-Welcome to team 6's GitHub Organization! <br>
-This is the home of our Campus Navigation System project — a fun (and hopefully useful) tool that helps students, staff, and visitors easily find their way around campus. 
+## Features
+- Shortest-path search with A* on campus road/building graph
+- Optional via points (multiple intermediate stops) computed in parallel by segment
+- Outputs node path to terminal and `temp/path_output.txt`
+- Python helper to plot the resulting path over campus nodes
 
-**What’s this project about?**
+## Layout
+- `src/` C sources (`main.c`, `astar.c`, `via_point.c`, etc.)
+- `include/` headers
+- `data/` graph inputs (`adj_list.csv`, `building_mapping.csv`, `node_coordinates.csv`)
+- `temp/` path output target (`path_output.txt`)
+- `visualization/` Python plotting script
 
-We aim to build a navigation system that makes campus routes easy to understand and provide clear and friendly route guidance. 
+## Build
+- Requires a C compiler with OpenMP (e.g., clang with `-fopenmp` or gcc) and POSIX libs.
+- Typical build via `make` (see `Makefile`). Example: `make all` then `./bin/buzznav`.
 
-Use cases: <br>
-- Students rushing to class <br>
-- Visitors exploring campus <br>
-- Staff finding the fastest path between buildings <br>
+## Running
+Quick start:
 
-**Cool features**
+```sh
+make            # build
+./bin/main -h   # see CLI usage
+./bin/main "<start>" [via1 via2 ...] "<goal>"   # run
+```
 
-- Step-by-step directions with estimated travel time <br>
-- Easy-to-follow turn-by-turn instructions <br>
-- Future expansion: choose your transportation mode (walk, bike, shuttle!) <br>
+Examples:
+```sh
+./bin/main "Student Center" "College of Computing Building"
+./bin/main "Student Center" "Tech Tower" "College of Computing Building"
+```
 
-**Data and graph construction**
+- Arguments are ordered start, optional vias, then goal.
+- Building names must match `data/building_mapping.csv` exactly.
+- `-h` or `--help` prints usage and exits.
 
-We construct a road–building adjacency graph for the Georgia Tech campus 
-using OpenStreetMap (OSM) data.
+## Via points
+When vias are provided, the route is solved segment-by-segment in parallel: start → via1 → via2 → … → goal. If any segment is unreachable or a building name is missing, the program exits with an error.
 
-- **Roads**: only motor-vehicle-accessible roads are kept.  
-- **Buildings**: each building is represented by its geometric centroid, which is projected to the nearest road segment (using point-to-segment distance).  
-- **Projection**: the projection point is added to the graph, and the corresponding road edge is split to preserve distances.  
-- **Final Output**: an adjacency list **Adj**, where
-  - For each node *i*, we store its set of neighbors that are directly connected.  
-  - Each neighbor *j* is stored together with the corresponding edge distance *d(i,j)*.  
-  - Formally:
-    ```
-    Adj[i] = { (j, d(i,j)) | j ∈ Neighbors(i) }
-    ```
-  
-This pipeline transforms raw OSM data into a unified road–building graph model,
-which can be used for shortest-path search, parking analysis, and other 
-network-based computations.
+## Visualization
+After a run, `temp/path_output.txt` holds the node sequence. Plot it with:
+
+```sh
+cd visualization
+python main.py
+```
+
+This reads `data/node_coordinates.csv` and overlays the path on the campus nodes.
+
+## Data assumptions
+- `adj_list.csv`: directed edges with distances (meters) as weights.
+- `building_mapping.csv`: building name → node id lookup.
+- `node_coordinates.csv`: node id → (lon, lat) for haversine heuristic and plotting.
