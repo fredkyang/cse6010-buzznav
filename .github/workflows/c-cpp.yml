@@ -1,0 +1,28 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc make
+    - name: build a project
+      run: make
+    - name: Run tests
+      run: make test
+    - name: Upload executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: campus-nav-executable
+        path: campus_nav
