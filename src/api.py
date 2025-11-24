@@ -4,10 +4,12 @@ import json
 from flask import Flask, request, jsonify, send_from_directory
 import os  # Import os for reliable path handling
 
+
 # --- Path 1: Frontend Folder ---
 # __file__ is .../src/api.py
 # We need to go up one level (..) to find 'frontend/'
 frontend_dir = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+EXECUTABLE_PATH = os.path.join('..', 'bin', 'main')
 app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
 
 # --- API 1: Get All Buildings ---
@@ -52,16 +54,22 @@ def get_navigation():
         # --- Path 3: C Executable (Corrected) ---
         # Assume the 'main' executable is in 'src/' alongside 'api.py'
         # os.path.dirname(__file__) gets the 'src/' directory
-        executable_path = os.path.join(os.path.dirname(__file__), 'main')
+        # executable_path = os.path.join(os.path.dirname(__file__), 'main')
+        executable_path = EXECUTABLE_PATH
 
+        #print(f"Executing pathfinding: {executable_path} \"{start_building}\" \"{goal_building}\"")
+        #print(f"Arg types: start_building={type(start_building)}, goal_building={type(goal_building)}")
         process = subprocess.run(
-            [executable_path, start_building, goal_building],
+            [executable_path, f"{start_building}", f"{goal_building}"],
             capture_output=True,
             text=True,
             check=False
         )
 
+        #print(f"Process Return Code: {process.returncode}")
+
         if process.returncode != 0:
+            # print("C program error output:", process.stderr)
             return jsonify({"status": "error", "message": process.stderr}), 500
 
         stdout = process.stdout
@@ -80,6 +88,7 @@ def get_navigation():
     except json.JSONDecodeError as e:
         return jsonify({"error": "Failed to parse C program output", "details": stdout}), 500
     except Exception as e:
+        # print("Unexpected error:", str(e))
         return jsonify({"error": str(e)}), 500
 
 # --- Static File Server ---
