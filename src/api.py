@@ -111,11 +111,10 @@ def serve_static(path):
 
 if __name__ == '__main__':
     print("===== C Navigation API Server (Running from src/) =====")
-    print("== Make sure you are in the 'src/' directory! ==")
-    print("\n1. Compile your C code (from this 'src/' directory):")
-    # (Updated) Compile command matches your file structure
-    print("   gcc -std=c99 -I../include -o main main.c graph.c astar.c utils.c -lm")
-    print("\n2. Run the server (from this 'src/' directory):")
+    print("\n1. Compile your C code at 'CSE6010-buzznav/' directory using Makefile:")
+    print("   make clean")
+    print("   make")
+    print("\n2. Run the server at 'CSE6010-buzznav/src' directory):")
     print("   python api.py")
     print("\n3. Open this URL in your browser:")
     print("   http://127.0.0.1:5000")
