@@ -1,6 +1,6 @@
 # Compiler and flags
-CC = gcc-15
-CFLAGS = -I include -Wall -Wextra -O2 -fopenmp
+CC = gcc
+CFLAGS = -std=c99 -D_GNU_SOURCE -I include -Wall -Wextra -O2 -fopenmp
 LDFLAGS = -fopenmp -lm
 
 # Directories
@@ -13,7 +13,7 @@ SRCS = $(wildcard $(SRC_DIR)/*.c)
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 # Output executable name
-TARGET = $(BIN_DIR)/buzznav
+TARGET = $(BIN_DIR)/main
 
 # Default rule
 all: $(TARGET)
@@ -35,3 +35,5 @@ clean:
 # Run the program
 run: $(TARGET)
 	./$(TARGET)
+
+.PHONY: all clean run
