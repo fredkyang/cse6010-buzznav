@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
     int num_via = argc - 3; // arguments between start and goal
 
     // Step 1: Load graph and buildingmapping from file
-    Graph* campus = load_graph("./data/adj_list.csv"); // Build adjacency list of the campus
+    Graph* campus = load_graph("../data/adj_list.csv"); // Build adjacency list of the campus
     if (!campus) {
         return 1;
     }
@@ -105,7 +105,7 @@ int main(int argc, char *argv[]){
         printf("  ]\n");
 
         printf("}\n");
-      
+    }
     if (path) {
         // ---- (A) Print to terminal ----
         printf("\nShortest Path (%.2f m): ", total_dist);
@@ -116,7 +116,7 @@ int main(int argc, char *argv[]){
         printf("\n");
 
         // ---- (B) Write path to file ----
-        FILE* fout = fopen("./temp/path_output.txt", "w");
+        FILE* fout = fopen("../temp/path_output.txt", "w");
         if (fout == NULL) {
             perror("Error opening path_output.txt");
         } else {
