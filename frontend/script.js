@@ -6,12 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const southWest = L.latLng(33.770, -84.405);
     const northEast = L.latLng(33.783, -84.385);
     const campusBounds = L.latLngBounds(southWest, northEast);
+    const paddedBounds = campusBounds.pad(0.02);
 
     const map = L.map('map', {
         center: [33.776, -84.397], // GA Tech Campus Center
         zoom: 16,
         minZoom: 15, // Set a minimum zoom
-        maxBounds: campusBounds // Restrict map panning
+        maxBounds: paddedBounds // Restrict map panning
     });
 
     // Add the tile layer (OpenStreetMap)
