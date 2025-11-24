@@ -106,30 +106,6 @@ int main(int argc, char *argv[]){
 
         printf("}\n");
     }
-    if (path) {
-        // ---- (A) Print to terminal ----
-        printf("\nShortest Path (%.2f m): ", total_dist);
-        for (int i = 0; i < path_len; i++) {
-            printf("%d", path[i]);
-            if (i < path_len - 1) printf(" -> ");
-        }
-        printf("\n");
-
-        // ---- (B) Write path to file ----
-        FILE* fout = fopen("../temp/path_output.txt", "w");
-        if (fout == NULL) {
-            perror("Error opening path_output.txt");
-        } else {
-            for (int i = 0; i < path_len; i++) {
-                fprintf(fout, "%d", path[i]);
-                if (i < path_len - 1) fprintf(fout, " ");
-            }
-            fprintf(fout, "\n");
-            fclose(fout);
-        }
-
-        free(path);
-    }
     else
     {
         // No path found
