@@ -2,19 +2,13 @@ import csv
 import subprocess
 import json
 from flask import Flask, request, jsonify, send_from_directory
-import os  # Import os for reliable path handling
+import os
 
-
-# --- Path 1: Frontend Folder ---
-# __file__ is .../src/api.py
-# We need to go up one level (..) to find 'frontend/'
 frontend_dir = os.path.join(os.path.dirname(__file__), '..', 'frontend')
 EXECUTABLE_PATH = os.path.join('..', 'bin', 'main')
 app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
 
 # --- API 1: Get All Buildings ---
-
-
 @app.route("/api/buildings")
 def get_buildings():
     """
@@ -22,8 +16,6 @@ def get_buildings():
     """
     try:
         buildings = []
-        # --- Path 2: CSV File ---
-        # From .../src/ go up (..) to 'data/'
         csv_path = os.path.join(os.path.dirname(
             __file__), '..', 'data', 'building_mapping.csv')
         with open(csv_path, mode='r', encoding='utf-8') as f:
@@ -36,44 +28,55 @@ def get_buildings():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# --- API 2: Navigate ---
-
-
+# --- API 2: Navigate with Via Points ---
 @app.route("/api/navigate")
 def get_navigation():
     """
-    Call the C executable at ./main (in the same folder as api.py)
+    Call the C executable with start, optional via points, and end
+    URL format: /api/navigate?start=A&via=B&via=C&end=D
     """
     start_building = request.args.get('start')
-    goal_building = request.args.get('end')
+    end_building = request.args.get('end')
+    
+    # Get all via points (multiple values with same key)
+    via_points = request.args.getlist('via')
 
-    if not start_building or not goal_building:
+    if not start_building or not end_building:
         return jsonify({"error": "Missing 'start' or 'end' parameter"}), 400
 
     try:
-        # --- Path 3: C Executable (Corrected) ---
-        # Assume the 'main' executable is in 'src/' alongside 'api.py'
-        # os.path.dirname(__file__) gets the 'src/' directory
-        # executable_path = os.path.join(os.path.dirname(__file__), 'main')
         executable_path = EXECUTABLE_PATH
 
-        #print(f"Executing pathfinding: {executable_path} \"{start_building}\" \"{goal_building}\"")
-        #print(f"Arg types: start_building={type(start_building)}, goal_building={type(goal_building)}")
+        # Build command: ./main "start" "via1" "via2" ... "end"
+        command = [executable_path, start_building]
+        
+        # Add via points in order
+        for via in via_points:
+            if via.strip():  # Only add non-empty via points
+                command.append(via)
+        
+        command.append(end_building)
+
+        # Debug: log the command being executed
+        print(f"Executing: {' '.join(command)}")
+
         process = subprocess.run(
-            [executable_path, f"{start_building}", f"{goal_building}"],
+            command,
             capture_output=True,
             text=True,
             check=False
         )
 
-        #print(f"Process Return Code: {process.returncode}")
+        print(f"Return code: {process.returncode}")
+        print(f"STDOUT: {process.stdout}")
+        print(f"STDERR: {process.stderr}")
 
         if process.returncode != 0:
-            # print("C program error output:", process.stderr)
             return jsonify({"status": "error", "message": process.stderr}), 500
 
         stdout = process.stdout
-        # 正則抽出 JSON
+        
+        # Extract JSON from output
         import re
         match = re.search(r'(\{.*\})', stdout, re.DOTALL)
         if match:
@@ -84,26 +87,22 @@ def get_navigation():
             return jsonify({"error": "No JSON found in C program output", "stdout": stdout}), 500
 
     except FileNotFoundError:
-        return jsonify({"error": "Pathfinding executable './main' not found in 'src/' folder. Did you run the compile command inside 'src/'?"}), 500
-    except json.JSONDecodeError as e:
+        return jsonify({"error": f"Pathfinding executable '{EXECUTABLE_PATH}' not found. Did you compile the code?"}), 500
+    except json.JSONDecodeError:
         return jsonify({"error": "Failed to parse C program output", "details": stdout}), 500
     except Exception as e:
-        # print("Unexpected error:", str(e))
+        print(f"Unexpected error: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
+
 # --- Static File Server ---
-
-
 @app.route("/")
 def serve_index():
-    # Serve index.html from '../frontend'
     return send_from_directory(app.static_folder, 'index.html')
 
 
 @app.route("/<path:path>")
 def serve_static(path):
-    # Serve files like 'script.js' and 'style.css'
-    # (Assuming your JS/CSS files are directly under frontend/)
     if path.endswith(('.js', '.css', '.html')):
         return send_from_directory(app.static_folder, path)
     return "Not Found", 404
