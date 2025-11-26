@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===== GLOBAL CONFIGURATION =====
-PROJECT_PATH="/mnt/c/Users/user/Desktop/GT 6010 Final Proj/cse6010-buzznav"
+PROJECT_PATH="$(pwd)"
 LOG_FILE="${PROJECT_PATH}/logs/buzznav_$(date +%Y%m%d_%H%M).log"
 mkdir -p "$(dirname "$LOG_FILE")"
 
