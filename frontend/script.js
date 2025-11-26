@@ -221,8 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }).bindPopup(`<b>Start:</b> ${start}`);
             markers.push(startMarker);
             
-            alert(data.via_point_indices)
-            alert(viaPoints)
+            // alert(data.via_point_indices)
+            // alert(viaPoints)
             // Orange markers for VIA POINTS
             if (viaPoints.length > 0 && data.via_point_indices) {
                 data.via_point_indices.forEach((index, i) => {
