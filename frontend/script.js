@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsPanel = document.getElementById('results-panel');
     const summaryEl = document.getElementById('route-summary');
     const stepsEl = document.getElementById('turn-by-turn-list');
+    const optimizeCheckbox = document.getElementById('optimize-order-checkbox');
 
     let buildingNames = [];
     let viaPointCounter = 0;
@@ -155,14 +156,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         try {
-            // Build API URL with via points
-            let apiUrl = `/api/navigate?start=${encodeURIComponent(start)}`;
+            const optimizeOrder = optimizeCheckbox.checked;
+
+            // Build API URL
+            let apiUrl;
             
-            viaPoints.forEach(via => {
-                apiUrl += `&via=${encodeURIComponent(via)}`;
-            });
-            
-            apiUrl += `&end=${encodeURIComponent(end)}`;
+            if (optimizeOrder) {
+                // TSP mode - send all buildings without order
+                apiUrl = `/api/navigate-tsp?`;
+                const allBuildings = [start, ...viaPoints, end];
+                allBuildings.forEach((building, index) => {
+                    apiUrl += `building${index + 1}=${encodeURIComponent(building)}`;
+                    if (index < allBuildings.length - 1) apiUrl += '&';
+                });
+            } else {
+                // Normal mode - maintain order
+                apiUrl = `/api/navigate?start=${encodeURIComponent(start)}`;
+                viaPoints.forEach(via => {
+                    apiUrl += `&via=${encodeURIComponent(via)}`;
+                });
+                apiUrl += `&end=${encodeURIComponent(end)}`;
+            }
 
             const response = await fetch(apiUrl);
             const data = await response.json();
@@ -191,6 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Create markers
             const markers = [];
             
+            // alert(data.path_coordinates)
+
             // Green marker for START
             const startMarker = L.marker(data.path_coordinates[0], {
                 title: 'Start',
@@ -204,7 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             }).bindPopup(`<b>Start:</b> ${start}`);
             markers.push(startMarker);
-
+            
+            alert(data.via_point_indices)
+            alert(viaPoints)
             // Orange markers for VIA POINTS
             if (viaPoints.length > 0 && data.via_point_indices) {
                 data.via_point_indices.forEach((index, i) => {
