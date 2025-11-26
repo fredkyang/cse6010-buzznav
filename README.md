@@ -60,13 +60,3 @@ This will:
 3. Open http://127.0.0.1:5000 in your browser
 
 Press `Ctrl+C` to stop.
-
-
-
-## Contributors
-
-CSE 6010 Final Project - Georgia Tech
-
-## License
-
-Academic project - Georgia Tech
