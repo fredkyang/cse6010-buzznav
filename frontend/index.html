@@ -15,11 +15,11 @@
 
     <div class="container">
         <div class="sidebar">
-            <h2>Georgia Tech Main Campus</h2>
+            <h2>BUZZNAV</h2>
 
             <div class="input-group autocomplete-container">
                 <label for="start-building">Start:</label>
-                <input type="text" id="start-building" placeholder="e.g., Student Center" autocomplete="off">
+                <input type="text" id="start-building" placeholder="e.g., John Lewis Student Center" autocomplete="off">
                 <div class="autocomplete-items" id="start-autocomplete-list"></div>
             </div>
 
@@ -30,9 +30,18 @@
 
             <button id="add-via-btn" class="secondary-btn">+ Add Via Point</button>
 
+            <!-- TSP Optimization Toggle -->
+            <div class="tsp-toggle-container">
+                <label class="tsp-checkbox-label">
+                    <input type="checkbox" id="optimize-order-checkbox">
+                    <span>Optimize visit order (TSP)</span>
+                </label>
+                <small class="tsp-help-text">When enabled, the route will visit all points in the most efficient order</small>
+            </div>
+
             <div class="input-group autocomplete-container">
                 <label for="end-building">Destination:</label>
-                <input type="text" id="end-building" placeholder="e.g., College of Computing Building" autocomplete="off">
+                <input type="text" id="end-building" placeholder="e.g., College of Business" autocomplete="off">
                 <div class="autocomplete-items" id="end-autocomplete-list"></div>
             </div>
 
