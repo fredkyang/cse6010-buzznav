@@ -68,7 +68,7 @@ def get_navigation():
         )
 
         print(f"Return code: {process.returncode}")
-        print(f"STDOUT: {process.stdout}")
+        # print(f"STDOUT: {process.stdout}")
         print(f"STDERR: {process.stderr}")
 
         if process.returncode != 0:
@@ -81,6 +81,7 @@ def get_navigation():
         match = re.search(r'(\{.*\})', stdout, re.DOTALL)
         if match:
             json_str = match.group(1)
+            print(f"Extracted JSON / Normal Mode: {json_str}")
             response_data = json.loads(json_str)
             return jsonify(response_data)
         else:
@@ -92,6 +93,72 @@ def get_navigation():
         return jsonify({"error": "Failed to parse C program output", "details": stdout}), 500
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+
+# --- API 3: Navigate with TSP Optimization ---
+@app.route("/api/navigate-tsp")
+def get_navigation_tsp():
+    """
+    Call C executable in TSP mode to optimize visit order
+    URL format: /api/navigate-tsp?building1=A&building2=B&building3=C...
+    """
+    print("TSP API called")
+    # Get all building parameters
+    buildings = []
+    i = 1
+    while True:
+        building = request.args.get(f'building{i}')
+        if not building:
+            break
+        buildings.append(building.strip())
+        i += 1
+    
+    if len(buildings) < 2:
+        return jsonify({"error": "At least 2 buildings required for TSP"}), 400
+    
+    try:
+        executable_path = EXECUTABLE_PATH
+        
+        # Build command: ./main --tsp "Building1" "Building2" "Building3"...
+        command = [executable_path, "--tsp"] + buildings
+        
+        print(f"TSP Mode: {' '.join(command)}")
+        process = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            check=False
+        )
+        
+        print(f"Return code: {process.returncode}")
+        # print(f"STDOUT: {process.stdout}")
+        # print(f"STDERR: {process.stderr}")
+        
+        if process.returncode != 0:
+            return jsonify({"status": "error", "message": process.stderr}), 501
+        
+        stdout = process.stdout
+        
+        # Extract JSON from output
+        import re
+        match = re.search(r'(\{.*\})', stdout, re.DOTALL)
+
+        print(f"match: {match}")
+        if match:
+            json_str = match.group(1)
+            print(f"TSP JSON: {json_str}")
+            response_data = json.loads(json_str)
+            return jsonify(response_data)
+        else:
+            return jsonify({"error": "No JSON found in TSP output", "stdout": stdout}), 502
+    
+    except FileNotFoundError:
+        return jsonify({"error": f"Executable '{EXECUTABLE_PATH}' not found"}), 503
+    except json.JSONDecodeError:
+        return jsonify({"error": "Failed to parse TSP output", "details": stdout}), 504
+    except Exception as e:
+        print(f"TSP error: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 
@@ -117,5 +184,7 @@ if __name__ == '__main__':
     print("   python api.py")
     print("\n3. Open this URL in your browser:")
     print("   http://127.0.0.1:5000")
+    print("\n4. Via points are now supported!")
+    print("   Example: Start -> Via1 -> Via2 -> End")
     print("==============================================")
     app.run(debug=True, port=5000)
