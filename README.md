@@ -1,57 +1,72 @@
-# Georgia Tech Campus Navigation System
+# BuzzNav - Georgia Tech Campus Navigation System
 
-Campus routing prototype for CSE6010. We build a directed, weighted graph from OpenStreetMap data, run A* (with optional via points), and emit the path for quick visualization.
+Campus routing prototype for CSE6010. We build a directed, weighted graph from OpenStreetMap data, run A*, Dijkstra algorithms (with optional via points) to generate turn-by-turn directions web-based visualization.
 
 ## Features
-- Shortest-path search with A* on campus road/building graph
-- Optional via points (multiple intermediate stops) computed in parallel by segment
-- Outputs node path to terminal and `temp/path_output.txt`
-- Python helper to plot the resulting path over campus nodes
+- Shortest-path search with A* on GT campus graph
+- Optional via points (multiple intermediate stops) in order or optimized order computed in parallel by segment
+- Turn-by-Turn Directions that include distances, directions, and building-based instructions
+- Real-time route visualization with OpenStreetMap
 
-## Layout
-- `src/` C sources (`main.c`, `astar.c`, `via_point.c`, etc.)
-- `include/` headers
-- `data/` graph inputs (`adj_list.csv`, `building_mapping.csv`, `node_coordinates.csv`)
-- `temp/` path output target (`path_output.txt`)
-- `visualization/` Python plotting script
+## Project Structure
 
-## Build
-- Requires a C compiler with OpenMP (e.g., clang with `-fopenmp` or gcc) and POSIX libs.
-- Typical build via `make` (see `Makefile`). Example: `make all` then `./bin/buzznav`.
-
-## Running
-Quick start:
-
-```sh
-make            # build
-./bin/main -h   # see CLI usage
-./bin/main "<start>" [via1 via2 ...] "<goal>"   # run
+```
+cse6010-buzznav/
+├── data/               # Graph data files
+│   ├── build_list.py          # Python code for building csv files
+│   ├── adj_list.csv           # Road network edges with distances
+│   ├── building_mapping.csv   # Building name → node ID mapping
+│   └── node_coordinates.csv   # Node coordinates (lat/lon)
+├── src/                # Backend codes
+│   ├── main.c                 # Entry point, JSON output
+│   ├── astar.c                # A* pathfinding algorithm
+│   ├── graph.c                # Graph data structures
+│   ├── via_point.c            # Multi-point routing
+│   ├── tsp.c                  # TSP optimization (Held-Karp)
+│   ├── instructions.c         # Turn-by-turn generation
+│   ├── utils.c                # Haversine distance, helpers
+│   └── api.py                 # Flask API server
+├── frontend/           # Web interface
+│   ├── index.html             # Main page
+│   ├── script.js              # Map and routing logic
+│   └── style.css              # UI styling
+├── include/            # C headers
+├── logs/               # Runtime logs (auto-generated)
+├── Makefile            # Build configuration
+├── run.sh              # One-command launcher
+└── README.md
 ```
 
-Examples:
-```sh
-./bin/main "Student Center" "College of Computing Building"
-./bin/main "Student Center" "Tech Tower" "College of Computing Building"
+## Quick Start
+
+### Requirements
+- C Compiler: GCC or Clang with OpenMP support
+- Python 3: With Flask (`pip install flask`)
+- Linux, macOS: Recommended for development
+
+### Run the Application
+
+```bash
+# Make script executable (first time only)
+chmod +x run.sh
+
+# Launch everything
+./run.sh
 ```
 
-- Arguments are ordered start, optional vias, then goal.
-- Building names must match `data/building_mapping.csv` exactly.
-- `-h` or `--help` prints usage and exits.
+This will:
+1. Compile the C backend
+2. Start the Flask server
+3. Open http://127.0.0.1:5000 in your browser
 
-## Via points
-When vias are provided, the route is solved segment-by-segment in parallel: start → via1 → via2 → … → goal. If any segment is unreachable or a building name is missing, the program exits with an error.
+Press `Ctrl+C` to stop.
 
-## Visualization
-After a run, `temp/path_output.txt` holds the node sequence. Plot it with:
 
-```sh
-cd visualization
-python main.py
-```
 
-This reads `data/node_coordinates.csv` and overlays the path on the campus nodes.
+## Contributors
 
-## Data assumptions
-- `adj_list.csv`: directed edges with distances (meters) as weights.
-- `building_mapping.csv`: building name → node id lookup.
-- `node_coordinates.csv`: node id → (lon, lat) for haversine heuristic and plotting.
+CSE 6010 Final Project - Georgia Tech
+
+## License
+
+Academic project - Georgia Tech
