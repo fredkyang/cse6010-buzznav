@@ -16,7 +16,7 @@ html {
     width: 350px;
     height: 100vh;
     padding: 20px;
-    background: #fff;
+    background: #B3A369;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     /* Allows scrolling if content is long */
@@ -53,7 +53,7 @@ html {
 #navigate-btn {
     width: 100%;
     padding: 10px;
-    background-color: #0058a0;
+    background-color: #003057;
     /* GATech Blue */
     color: white;
     border: none;
@@ -118,11 +118,11 @@ html {
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
-    border-left: 3px solid #0058a0;
+    border-left: 3px solid #003057;
 }
 
 .secondary-btn {
-    background-color: #6c757d;
+    background-color: #003057;
     color: white;
     border: none;
     padding: 8px 16px;
@@ -165,11 +165,11 @@ html {
     padding: 10px;
     background-color: #f8f9fa;
     border-radius: 5px;
-    border-left: 3px solid #0058a0;
+    border-left: 3px solid #003057;
 }
 
 .step-number {
-    background-color: #0058a0;
+    background-color: #003057;
     color: white;
     border-radius: 50%;
     width: 28px;
@@ -245,10 +245,47 @@ html {
 }
 
 #turn-by-turn-list::-webkit-scrollbar-thumb {
-    background: #0058a0;
+    background: #003057;
     border-radius: 4px;
 }
 
 #turn-by-turn-list::-webkit-scrollbar-thumb:hover {
     background: #003d70;
+}
+
+/* TSP Toggle Styling */
+.tsp-toggle-container {
+    margin: 15px 0;
+    padding: 12px;
+    background-color: #f0f8ff;
+    border-radius: 5px;
+    border: 1px solid #003057;
+}
+
+.tsp-checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: #333;
+}
+
+.tsp-checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.tsp-checkbox-label span {
+    user-select: none;
+}
+
+.tsp-help-text {
+    display: block;
+    margin-top: 6px;
+    margin-left: 26px;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.4;
 }
