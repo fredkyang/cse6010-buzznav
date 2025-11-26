@@ -1,11 +1,13 @@
 # BuzzNav - Georgia Tech Campus Navigation System
 
-Campus routing prototype for CSE6010. We build a directed, weighted graph from OpenStreetMap data, run A*, Dijkstra algorithms (with optional via points) to generate turn-by-turn directions web-based visualization.
+Campus routing prototype for CSE6010. 
+
+We build a directed, weighted graph from OpenStreetMap data, run A*, Dijkstra algorithms (with optional via points) to generate turn-by-turn directions web-based visualization.
 
 ## Features
 - Shortest-path search with A* on GT campus graph
 - Optional via points (multiple intermediate stops) in order or optimized order computed in parallel by segment
-- Turn-by-Turn Directions that include distances, directions, and building-based instructions
+- Turn-by-turn directions that include distances, directions, and building-based instructions
 - Real-time route visualization with OpenStreetMap
 
 ## Project Structure
@@ -45,6 +47,7 @@ cse6010-buzznav/
 - Linux, macOS: Recommended for development
 
 ### Run the Application
+Firstly, modify PROJECT_PATH in run.sh file if needed
 
 ```bash
 # Make script executable (first time only)
