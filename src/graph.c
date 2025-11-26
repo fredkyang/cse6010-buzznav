@@ -179,11 +179,11 @@ int get_building_id(const BuildingMapping *mapping, const char *name)
     {
         if (strcmp(mapping->entries[i].name, name) == 0)
         {
-            fprintf(stdout, "\033[32m:) Note down location of '%s'\n", name);
+            // fprintf(stdout, "\033[32m:) Note down location of %s:", name);
             return mapping->entries[i].node_id;
         }
     }
-    fprintf(stderr, "\033[31m:(\033[0m Building '%s' not found in mapping\n", name);
+    fprintf(stderr, "\033[31m:(\033[0m Building %s not found in mapping", name);
     return -1; // no name matching
 }
 
