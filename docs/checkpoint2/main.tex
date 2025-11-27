@@ -170,12 +170,15 @@ In the future, we will divide the tasks among members as below:
     \item \textbf{Routing Output \& Instructions}: Fred Yang, Ming-Cheng Fan, Haowen Jiang
         \begin{itemize}
             \item Implement turn-by-turn instruction for navigation system
-            \item Format clearly results for users (expected to print clear instruction text instead of nodes\_id).
+            \item Format results clearly for users (display text instructions instead of instead of nodes\_id).
+            \item Ensure instructions update dynamically when users change start/end points.
         \end{itemize}
     \item \textbf{Front-End UI}: Fred Yang, Chia-Hsin Chiu, Ming-Cheng Fan
         \begin{itemize}
-            \item Build a user-friendly web that allows users to interact with our BuzzNav system via visualized map.
-            \item Allow users to interactively filter and locate points of interest.
+            \item Build a user-friendly web interface to interact with the BuzzNav system using a visualized campus map.
+            \item Implement interactive features such as selecting start and end locations, and highlighting routes.
+            \item Integrate frontend with backend APIs to fetch building data and navigation paths.
+            \item Format and display navigation path data clearly on the map, including markers for start, end, and via points.
         \end{itemize}
     \item \textbf{Testing, Integration \& GitHub Repository Maintenance}: Team-wide
 \end{itemize}
