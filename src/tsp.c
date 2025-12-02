@@ -232,7 +232,9 @@ int find_optimal_multi_building_route(
         }
     }
 
-    dp[1][0] = 0;
+    for (int i = 0; i < N; i++) {
+        dp[1 << i][i] = 0;
+    }
 
     for (int mask = 1; mask < FULL; mask++) {
         for (int last = 0; last < N; last++) {
@@ -304,7 +306,11 @@ int find_optimal_multi_building_route(
     int total = 0;
     for (int i = 0; i < N - 1; i++) {
         int a = order[i], b = order[i+1];
-        total += seglen[a][b];
+        if (i == 0) {
+            total += seglen[a][b];  
+        } else {
+            total += seglen[a][b] - 1; 
+        }
     }
 
     int* full = malloc(sizeof(int) * total);
@@ -312,8 +318,9 @@ int find_optimal_multi_building_route(
 
     for (int i = 0; i < N - 1; i++) {
         int a = order[i], b = order[i+1];
-
-        int start = (i == 0 ? 0 : 1);
+        
+        int start = (i == 0) ? 0 : 1;
+        
         for (int j = start; j < seglen[a][b]; j++) {
             full[idx++] = segs[a][b][j];
         }
