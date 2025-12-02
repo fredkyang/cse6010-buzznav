@@ -6,7 +6,7 @@
 #include "via_point.h"
 #include "instructions.h"
 #include "tsp.h"
-#include "utils.h" //
+#include "utils.h"
 
 // --- Helper Functions ---
 
@@ -52,26 +52,30 @@ void handle_tsp_mode(Graph* campus, BuildingMapping* mapping, int argc, char *ar
         res.status_code = 1;
         res.error_message = "TSP optimization failed";
         print_json_response(&res, campus);
-        // Note: Don't free res here, we do it at end of function usually
-        // but for TSP specific cleanup, see below.
         return;
     }
 
-    // Identify via indices in the final path
-    // (Optimization: This logic could be moved to utils or tsp.c)
+    // Identify ALL building nodes in the final path
     res.num_via_indices = num_buildings - 2;
     if (res.num_via_indices > 0) {
         res.via_indices = malloc(sizeof(int) * res.num_via_indices);
-        for (int i = 1; i < num_buildings - 1; i++) {
-            int b_id = get_building_id(mapping, building_names[i]);
-            res.via_indices[i-1] = -1; // Default not found
-            for (int j = 0; j < res.path_length; j++) {
-                if (res.path_node_ids[j] == b_id) {
-                    res.via_indices[i-1] = j;
-                    break;
+        int via_count = 0;
+        
+        for (int j = 1; j < res.path_length - 1 && via_count < res.num_via_indices; j++) {
+            int node_id = res.path_node_ids[j];
+            
+            for (int i = 0; i < num_buildings; i++) {
+                int b_id = get_building_id(mapping, building_names[i]);
+                if (node_id == b_id) {
+                    if (j != 0 && j != res.path_length - 1) {
+                        res.via_indices[via_count++] = j;
+                        break;
+                    }
                 }
             }
         }
+        
+        res.num_via_indices = via_count;
     }
 
     // Generate Instructions
@@ -84,10 +88,9 @@ void handle_tsp_mode(Graph* campus, BuildingMapping* mapping, int argc, char *ar
     // Output
     print_json_response(&res, campus);
     
-    // Cleanup (path_node_ids is usually freed by caller in this implementation)
+    // Cleanup
     if(res.path_node_ids) free(res.path_node_ids);
     if(res.via_indices) free(res.via_indices);
-    // free instructions via utils helper if needed or manually
 }
 
 void handle_navigation_mode(Graph* campus, BuildingMapping* mapping, int argc, char *argv[]) {
@@ -159,7 +162,6 @@ void handle_navigation_mode(Graph* campus, BuildingMapping* mapping, int argc, c
     if(res.path_node_ids) free(res.path_node_ids);
     if(res.via_indices) free(res.via_indices);
     if(via_ids) free(via_ids);
-    // free instructions...
 }
 
 // --- Main Entry Point ---
@@ -181,7 +183,6 @@ int main(int argc, char *argv[]) {
     }
 
     // 3. Dispatch based on mode
-    // Using stderr for logs so stdout remains clean for JSON
     if (strcmp(argv[1], "--tsp") == 0) {
         if (argc < 4) {
             print_json_error("TSP mode requires at least 2 buildings");
