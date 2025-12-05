@@ -1,3 +1,4 @@
+[![C/C++ CI](https://github.com/fredkyang/gt_cse6010_navigation_system/workflows/C/C++%20CI/badge.svg)](https://github.com/fredkyang/gt_cse6010_navigation_system/actions)
 # BuzzNav - Georgia Tech Campus Navigation System
 
 Campus routing prototype for CSE6010. 
